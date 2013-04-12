@@ -62,6 +62,7 @@ int main(int argc, char **argv) {
 	}
 	
 	d_init("algdata", "algdata", NULL);
+	d_render_clearcolor_set(200, 200, 255);
 
 	if (!(img = d_img_load_raw(argv[1])).data)
 		return -1;
