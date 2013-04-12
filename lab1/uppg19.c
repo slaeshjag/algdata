@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 	DARNIT_TILESHEET *ts;
 
 	if (argc < 2) {
-		fprintf(stderr, "Usage: %s <iamge to process>\n");
+		fprintf(stderr, "Usage: %s <iamge to process>\n", argv[1]);
 		return -1;
 	}
 	

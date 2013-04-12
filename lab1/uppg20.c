@@ -92,7 +92,6 @@ int main(int argc, char **argv) {
 	DARNIT_IMAGE_DATA img;
 	DARNIT_TILESHEET *ts;
 	IMG_STRUCT **imgs, **tmp;
-	DARNIT_KEYS keys;
 	int images, image_disp, i;
 
 	imgs = NULL;
@@ -129,7 +128,6 @@ int main(int argc, char **argv) {
 	sort_image(imgs, images);
 
 	for (;;) {
-		keys = d_keys_get();
 		d_render_begin();
 
 		d_render_tile_blit(imgs[image_disp]->ts, 0, 0, 0);

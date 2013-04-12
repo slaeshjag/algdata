@@ -23,9 +23,6 @@ void mergesort(unsigned int *data, int pivot, int size, unsigned int *scratchpad
 }
 
 void image_sort_do(unsigned int *data, unsigned int size, unsigned int *scratchpad) {
-	int i, j;
-	unsigned int tmp;
-
 	if (size <= 1)
 		return;
 
@@ -60,7 +57,7 @@ int main(int argc, char **argv) {
 	DARNIT_IMAGE_DATA img;
 
 	if (argc < 2) {
-		fprintf(stderr, "Usage: %s <image file to process>\n");
+		fprintf(stderr, "Usage: %s <image file to process>\n", argv[1]);
 		return -1;
 	}
 	

@@ -23,8 +23,6 @@ int geometrics_image(DARNIT_IMAGE_DATA img, int *w, int *h) {
 
 
 void fill_image(DARNIT_IMAGE_DATA img, int x, int y, unsigned int replace, unsigned int color) {
-	unsigned int replace_this;
-
 	if (x < 0 || y < 0)
 		return;
 	if (x >= img.w || y >= img.h)
