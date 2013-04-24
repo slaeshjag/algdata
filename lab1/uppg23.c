@@ -57,6 +57,7 @@ int maze_generate_path(DARNIT_TILEMAP *tm, int x, int y, int allow_exit, int min
 	}
 
 	tm->data[MAZE_INDEX(x, y, tm->w)] = 0;
+
 	/* Ge slumpen några försök */
 	for (i = 0; i < 4 + (allow_exit * 16 * (min < 32)); i++) 
 		switch (rand() & 0x3) {
@@ -77,6 +78,8 @@ int maze_generate_path(DARNIT_TILEMAP *tm, int x, int y, int allow_exit, int min
 	if (allow_exit)
 		return !(tm->data[MAZE_INDEX(x, y, tm->w)] = 1);
 	
+	/* Såvida vi inte skapar stickspår alltså, då är det här jättebra! */
+	
 	/* Om vi hittade ett giltigt nästa steg */
 	found:
 	
@@ -90,6 +93,7 @@ void maze_generate(DARNIT_TILEMAP *tm) {
 	/* Först, generera vägen ut! */
 	maze_generate_path(tm, 24, 13, 1, 0);
 
+	/* Sen, generera stickspåren */
 	for (i = 1; i < tm->w - 1; i++) 
 		for (j = 1; j < tm->h - 1; j++)
 			if (tm->data[MAZE_INDEX(i, j, tm->w)] == 0) {
@@ -205,5 +209,3 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
-
-
