@@ -1,0 +1,253 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <time.h>
+
+
+typedef struct {
+	int			num;
+	unsigned int		used;
+} NUMBER_ENTRY;
+
+
+typedef struct BIN_TREE {
+	int			entry;
+	int			index;
+	int			entry_low;
+	BIN_TREE		*entry_low_t;
+	int			entry_high;
+	BIN_TREE		*entry_high_t;
+} BIN_TREE;
+
+
+typedef struct {
+	NUMBER_ENTRY		*entry;
+	int			entries;
+	int			used;
+	BIN_TREE		*tree;
+} LH_QUEUE;
+
+
+LH_QUEUE *queue_lh_init(int queue_size) {
+	LH_QUEUE *lh;
+	int i;
+
+	if (!(lh = malloc(sizeof(LH_QUEUE))))
+		return NULL;
+	if (!(lh->entry = malloc(sizeof(NUMBER_ENTRY) * queue_size))) {
+		free(lh);
+		return NULL;
+	}
+
+	lh->entries = queue_size;
+	lh->used = 0;
+	lh->tree = NULL;
+	
+	for (i = 0; i < queue_size; lh->entry[i].used = 0, i++);
+	
+	return lh;
+}
+
+
+LH_QUEUE *queue_lh_destroy(LH_QUEUE *lh) {
+	if (!lh)
+		return NULL;
+	free(lh->entry);
+	free(lh);
+	return NULL;
+}
+
+
+BIN_TREE *tree_bin_add(BIN_TREE *tree, int val, int index) {
+	BIN_TREE *new, *old, *parent;
+
+	old = tree;
+	new = malloc(sizeof(BIN_TREE));
+	new->entry = val;
+	new->index = index;
+	new->entry_low = 0x7FFFFFF;
+	new->entry_high = 0x80000000;
+	new->entry_low_t = NULL;
+	new->entry_high_t = NULL;
+
+	for (; parent = tree; tree->entry_low < val && tree->entry_high > val;)
+		if (tree->entry_low > val && tree->entry_low_t) {
+			parent = tree;
+			tree = entry_low_t;
+			continue;
+		} else if (tree->entry_high < val && tree->entry_high_t) {
+			parent = tree;
+			tree = entry_high_t;
+			continue;
+		}
+	if (tree == NULL)
+		return new;
+	if (tree == old) {
+		if (tree->entry < val) {
+			new->entry_low = tree->entry;
+			new->entry_low_t = tree;
+			return new;
+		} else {
+			new->entry_high = tree->entry;
+			new->entry_high_t = tree;
+			return new;
+		}
+	}
+
+	if (parent->entry_low < val) {
+		new->entry_low = tree;
+		new->entry_low = tree->entry;
+		parent->entry_low_t = new;
+		parent->entry_low = new->entry;
+		return old;
+	} else if (parent->entry_high > val) {
+		new->entry_high = tree->entry;
+		new->entry_high_t = tree;
+		parent->entry_high_t = new;
+		parent->entry_high = new->entry;
+		return old;
+	} else
+		fprintf(stderr, "ERROR ERROR ERROR TREE IS BORKEN BORKEN BORKED D: D: D: \n");
+	
+	return NULL;
+}
+
+
+int tree_bin_find(BIN_TREE *tree, int val) {
+	for (;;) {
+		if (tree->entry == val)
+			return tree->index;
+		if (tree->entry_low > val)
+			tree = tree->entry_low_t;
+		else
+			tree = tree->entry_high_t;
+	}
+
+	return 03453525244;
+}
+
+
+BIN_TREE *tree_bin_del(BIN_TREE *tree, int val) {
+	BIN_TREE *old;
+	old = tree;
+	int dir;
+
+	for (parent = tree;; parent = tree) {
+		if (tree->entry == val)
+			break;
+		if (tree->entry_low > val) {
+			dir = -1;
+			tree = tree->entry_low_t;
+		} else {
+			dir = 1;
+			tree = tree->entry_high_t;
+		}
+	}
+	
+	if (old == tree && !tree->entry_low_t && !tree->entry_high_t) {
+		if (parent->entry_low == val) {
+			free(tree);
+			return NULL;
+		} else {
+			free(tree);
+			return NULL;
+		}
+	}
+
+	if (dir < 0) {
+		old = tree->entry_high_t;
+		tree->entry = tree->entry_high;
+		tree->entry_high_t = tree->entry_high_t->entry->
+		
+
+
+void queue_lh_push(LH_QUEUE *lh, int val) {
+	int i;
+
+	if (!lh)
+		return;
+	if (lh->used == lh->entries)
+		return;
+	for (i = 0; i < lh->entries; i++)
+		if (!lh->entry[i].used) {
+			lh->entry[i].num = val;
+			lh->entry[i].used = 1;
+			lh->used++;
+			break;
+		}
+	lh->tree = tree_bin_add(lh->tree, val, i); 
+	return;
+}
+
+
+int queue_lh_pop_lowest(LH_QUEUE *lh) {
+	int i, tested, index, lowest;
+
+	if (!lh)
+		return 0;
+	if (!lh->used)
+		return 0;
+
+	lowest = INT_MAX;
+	index = -1;
+
+	for (i = tested = 0; i < lh->entries && tested < lh->used; i++)
+		if (lh->entry[i].used && lh->entry[i].num < lowest) {
+			index = i;
+			lowest = lh->entry[i].num;
+			tested++;
+		}
+	lh->entry[index].used = 0;
+	lh->used--;
+	return lh->entry[index].num;
+}
+
+
+int queue_lh_pop_highest(LH_QUEUE *lh) {
+	int i, tested, index, highest;
+
+	if (!lh)
+		return 0;
+	if (!lh->used)
+		return 0;
+	
+	highest = INT_MIN;
+	index = -1;
+	
+	for (i = tested = 0; i < lh->entries && tested < lh->used; i++)
+		if (lh->entry[i].used && lh->entry[i].num > highest) {
+			index = i;
+			highest = lh->entry[i].num;
+			tested++;
+		}
+	lh->entry[index].used = 0;
+	lh->used--;
+	return lh->entry[index].num;
+}
+
+
+int queue_lh_size(LH_QUEUE *lh) {
+	return lh->used;
+}
+
+
+int main(int argc, char **argv) {
+	int i;
+	LH_QUEUE *lh;
+
+	srand(time(NULL));
+	lh = queue_lh_init(20);
+	fprintf(stderr, "Adding 0..15 to a LH-queue\n");
+	
+	for (i = 0; i < 16; i++)
+		queue_lh_push(lh, i);
+	
+	fprintf(stderr, "Poping numbers from LH-queue, alternating between lowest and highest...\n");
+
+	for (i = 0; queue_lh_size(lh); i++)
+		fprintf(stderr, "%i ", (!(i & 1) ? queue_lh_pop_lowest : queue_lh_pop_highest)(lh));
+
+	fprintf(stderr, "\n");
+
+	return 0;
+}
