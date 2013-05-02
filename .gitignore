@@ -4,6 +4,9 @@
 # vim
 *.swp
 
+# blugh
+*.txt
+
 # Libraries
 *.lib
 *.a

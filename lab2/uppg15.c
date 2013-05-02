@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 		if ((rand() % 6) < 2) {
 			fprintf(stderr, "\x1B[31mOUT OF TONER! Press enter to replace\x1B[0m\n");
 			getchar();
-			fprintf(stderr, "Continuing printing...\n");
+			fprintf(stderr, "Printing resumed...\n");
 		}
 	}
 
