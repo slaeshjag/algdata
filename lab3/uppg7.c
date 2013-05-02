@@ -187,7 +187,7 @@ int db_add_neighbour(DATABASE *db, int country, const char *value) {
 
 void *db_get_prop(const char *prop) {
 	if (!strcmp(prop, "country")) return db_set_country;
-	if (!strcmp(prop, "poulation")) return db_set_population;
+	if (!strcmp(prop, "population")) return db_set_population;
 	if (!strcmp(prop, "surface")) return db_set_surface;
 	if (!strcmp(prop, "capital")) return db_set_capital;
 	if (!strcmp(prop, "delneighbour")) return db_del_neighbour;
