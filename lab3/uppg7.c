@@ -93,15 +93,15 @@ int db_compare_country(ENTRY *prim, ENTRY *sec) {
 }
 
 int db_compare_population(ENTRY *prim, ENTRY *sec) {
-	return (prim->population - sec->population);
+	return (sec->population - prim->population);
 }
 
 int db_compare_surface(ENTRY *prim, ENTRY *sec) {
-	return (prim->surface - sec->surface);
+	return (sec->surface - prim->surface);
 }
 
 int db_compare_density(ENTRY *prim, ENTRY *sec) {
-	return (prim->population / (!prim->population ? 1 : prim->population)) - (sec->population / (!sec->population ? 1 : sec->population));
+	return -((prim->population / (!prim->surface ? 1 : prim->surface)) - (sec->population / (!sec->surface ? 1 : sec->surface)));
 }
 
 void *db_sort_get(const char *mode) {
@@ -114,14 +114,14 @@ void *db_sort_get(const char *mode) {
 
 void db_sort(DATABASE *db, const char *mode) {
 	ENTRY tmp;
-	int i, j, (*sort)(ENTRY *prim, ENTRY *sec) = db_sort_get(mode);
-	
+	int i, j, (*sort)(ENTRY *prim, ENTRY *sec) = db_sort_get(mode);	
 	for (i = 0; i < db->entries; i++)
 		for (j = i; j > 0 && sort(&db->entry[j-1], &db->entry[j]) > 0; j--) {
 			tmp = db->entry[j];
 			db->entry[j] = db->entry[j-1];
 			db->entry[j-1] = tmp;
 		}
+	db_rebuild_translate(db);
 	return;
 }
 
@@ -215,7 +215,7 @@ int db_save(DATABASE *db, const char *file) {
 	for (i = 0; i < db->entries; i++) {
 		fprintf(fp, "%s %s %lli %lli %i\n", db->entry[i].country, db->entry[i].capital, db->entry[i].surface, db->entry[i].population, db->entry[i].neighbours);
 		for (j = 0; j < db->entry[i].neighbours; j++) 
-			if (db->entry[i].neighbour[j]) fprintf(fp, " %i", db->translate[db->entry[i].neighbour[j]]);
+			if (db->entry[i].neighbour[j] >= 0) fprintf(fp, " %i", db->translate[db->entry[i].neighbour[j]]);
 		fprintf(fp, "\n");
 	}
 	fclose(fp);
@@ -287,6 +287,7 @@ int main(int argc, char **argv) {
 		else if (!strcmp(command, "load")) db_load(&db, country);
 		else if (!strcmp(command, "save")) db_save(&db, country);
 		else if (!strcmp(command, "list")) db_list(&db, country);
+		else if (!strcmp(command, "sort")) db_sort(&db, country);
 		else if (!strcmp(command, "clear")) db_clear(&db);
 		else {
 			if ((c = db_locate_country(&db, country)) < 0)

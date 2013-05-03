@@ -210,7 +210,6 @@ int wordlist_delete(WORD_LIST *l, const char *word) {
 
 
 int main(int argc, char **argv) {
-	int i;
 	WORD_LIST *l = init_wordlist();
 	char input[512], command[128], word[128], target[128];
 
