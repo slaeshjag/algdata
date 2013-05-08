@@ -54,7 +54,7 @@ void hash_table_add(HASH_TABLE *hash, int hash_val, int index) {
 }
 
 
-int hash_lookup(WORD_COUNT *word, HASH_TABLE *hash, int size, char *compare) {
+int hash_lookup(WORD_COUNT *word, HASH_TABLE *hash, char *compare) {
 	int i;
 	unsigned int hash_d;
 
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 		tmp = strip_case(buff);
 		if (strlen(buff) == 0)
 			continue;
-		if (!hash_lookup(word, hash, HASH_TABLE_SIZE, buff)) {
+		if (!hash_lookup(word, hash, buff)) {
 			word = realloc(word, sizeof(WORD_COUNT) * ++words);
 			word[words - 1].str = strdup(tmp);
 			word[words - 1].references = 1;

@@ -156,10 +156,13 @@ void string_to_ascii(char *str, char *buff) {
 int main(int argc, char **argv) {
 	char buff[512], buff2[512];
 
-	string_to_morse("hello world", buff);
-	fprintf(stderr, "hello world: %s\n", buff);
-	string_to_ascii(buff, buff2);
-	fprintf(stderr, "%s\n", buff2);
+	fprintf(stderr, "Enter a message to encode in morse: ");
+	fgets(buff, 512, stdin);
+
+	string_to_morse(buff, buff2);
+	fprintf(stderr, "Morse: %s\n", buff2);
+	string_to_ascii(buff2, buff);
+	fprintf(stderr, "And back again: %s\n", buff);
 
 	return 0;
 }
